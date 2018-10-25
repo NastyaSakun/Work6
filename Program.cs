@@ -13,16 +13,15 @@ namespace Work6
         {
 
             // For abstract class
-
-            Inventar skameika = new Skameika();
+            Console.WriteLine("Полиморфизм (сложение длин строк):");
+            Inventar skameika = new Skameika() { name="скамейка", count=8};
             string a = "Bed";
-            skameika.Print();
             Console.WriteLine($"\0{skameika.V_method(a.Length)}");
             Console.WriteLine();
 
             // For interface
 
-            Brusia br = new Brusia();
+            Brusia br = new Brusia() { name="брусья", count=3};
             string brusia2 = "Brusia";
             Console.WriteLine($"Реализация работы с интерфейсом:\0");
             Console.WriteLine($"\0сумма пар брусьев:\0{br.Summ(br.brusia, 4)}");
@@ -41,7 +40,7 @@ namespace Work6
 
 
             Console.WriteLine("Реализация работы с is:");
-            Maty maty = new Maty();
+            Maty maty = new Maty() { name="маты", count=10};
             Console.Write("\0принадлежит ли созданный объект maty классу Ball:\0");
             maty.Proverka(maty);
             Console.WriteLine();
@@ -92,6 +91,30 @@ namespace Work6
             things = AllThings.table;
             Console.WriteLine($"Количество столов:\0{(int)things}");
             Console.WriteLine();
+
+            Console.WriteLine("Работа с контейнером:");
+            Container_for_Zal cont = new Container_for_Zal();
+            cont.Push(skameika);
+            cont.Push(br);
+            cont.Push(maty);
+
+            Console.WriteLine("\tВесь список вещей:\0");
+            cont.Show();
+
+            cont.Delete(br);
+            Console.WriteLine("\tСписок вещей после удаления одной из них:\0");
+            cont.Show();
+            Console.WriteLine();
+            Console.Write("\0Общее количество вещей:\0");
+            cont.Count_();
+            Console.WriteLine();
+
+
+            Console.WriteLine("Работа с контроллером:");
+            Controller cont1 = new Controller(cont);
+            cont1.Sort();
+            
+
         }
 
 
@@ -122,6 +145,10 @@ namespace Work6
 
         public abstract class Inventar : Interface1
         {
+
+            public string name;
+            public int count;
+
             public string one = "Inventar";
 
             virtual public int V_method(int a)
@@ -138,21 +165,29 @@ namespace Work6
             {
                 return a + one;
             }
+
+            public void Print_()
+            {
+                Console.WriteLine($"\0Название предмета:\0{name};\0число предметов:\0{count}");
+            }
         }
 
 
         public partial class Skameika : Inventar
+        {            
+            public override string ToString()
+            {
+                return ($"\0Информация об объекте:\0{E},\0{E.Equals(6)},\0{E.GetHashCode()},\0{E.GetType()}");
+            }
+        }
+
+        public partial class Skameika:Inventar
         {
             public int E = 28;
 
             public override int V_method(int a)
             {
                 return (one.Length * a);
-            }
-
-            public override string ToString()
-            {
-                return ($"\0Информация об объекте:\0{E},\0{E.Equals(6)},\0{E.GetHashCode()},\0{E.GetType()}");
             }
         }
 
@@ -238,5 +273,90 @@ namespace Work6
                 Console.WriteLine(invent.ToString());
             }
         }
+
+
+
+
+        class Container_for_Zal
+        {
+            
+            public List<Inventar> cont;
+
+            public Container_for_Zal()
+            {
+                cont = new List<Inventar>();
+            }
+
+
+            public void Push(Inventar El)
+            {
+                cont.Add(El);
+            }
+
+            public void Delete(Inventar El)
+            {
+                for (int i = 0; i < cont.Count; i++)
+                {
+                    if (El.Equals(cont[i]))
+                    {
+                        cont.RemoveAt(i);
+                    }
+                }
+            }
+
+            public void Show()
+            {
+                for (int i = 0; i < cont.Count; i++)
+                {
+                    cont[i].Print_();
+                }
+                Console.WriteLine();
+            }
+
+            public void Count_()
+            {
+                int Count = 0;
+                for (int i = 0; i < cont.Count; i++)
+                {
+                    Count = Count + cont[i].count;
+                }
+                Console.WriteLine($"{Count}");
+            }
+        }
+
+
+        class Controller:Container_for_Zal
+        {
+           
+            public Container_for_Zal cont1 = new Container_for_Zal();
+
+            public Controller(Container_for_Zal cont1)
+            {
+                this.cont1 = cont1;
+            }
+           
+            public void Sort()
+            {
+                Inventar temp;
+                for (int i = 0; i < cont1.cont.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < cont1.cont.Count; j++)
+                    {
+                        if (cont1.cont[i].count > cont1.cont[j].count)
+                        {
+                            temp = cont1.cont[i];
+                            cont1.cont[i] = cont1.cont[j];
+                            cont1.cont[j] = temp;
+                        }
+                    }
+                }
+                Console.WriteLine("\0Отсортированные вещи:");
+                for (int f = 0; f < cont1.cont.Count; f++)
+                {
+                    cont1.cont[f].Print_();
+                }
+            }
+        }
     }
 }
+
