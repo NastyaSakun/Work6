@@ -16,7 +16,7 @@ namespace Work6
 
             Inventar skameika = new Skameika();
             string a = "Bed";
-            Console.WriteLine($"Полиморфизм (умножение длин строк):\0");
+            skameika.Print();
             Console.WriteLine($"\0{skameika.V_method(a.Length)}");
             Console.WriteLine();
 
@@ -77,8 +77,21 @@ namespace Work6
             {
                 pr.iAmPrinting(array[i]);
             }
+            Console.WriteLine();
 
 
+            Console.WriteLine("Работа со структурой:");
+            Zal zal;
+            zal.thing = "мяч";
+            zal.count = 6;
+            zal.Print();
+            Console.WriteLine();
+
+            Console.WriteLine("Работа с перечислением:");
+            AllThings things;
+            things = AllThings.table;
+            Console.WriteLine($"Количество столов:\0{(int)things}");
+            Console.WriteLine();
         }
 
 
@@ -87,12 +100,23 @@ namespace Work6
             public string thing;
             public int count;
 
+            public Zal (string thing, int count)
+            {
+                this.thing = thing;
+                this.count = count;
+            }
+
+            public void Print()
+            {
+                Console.WriteLine($"\0Название предмета:\0{thing};\0число предметов:\0{count}");
+            }
+
 
         }
 
         enum AllThings
         {
-
+            Ball=1, skameika, table
         }
 
 
@@ -119,12 +143,17 @@ namespace Work6
 
         public partial class Skameika : Inventar
         {
+            public int E = 28;
+
             public override int V_method(int a)
             {
                 return (one.Length * a);
             }
 
-            
+            public override string ToString()
+            {
+                return ($"\0Информация об объекте:\0{E},\0{E.Equals(6)},\0{E.GetHashCode()},\0{E.GetType()}");
+            }
         }
 
 
